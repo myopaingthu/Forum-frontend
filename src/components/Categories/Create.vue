@@ -1,0 +1,107 @@
+<template>
+  <v-container>
+      <!-- <v-alert v-if="errors" type="error" :value="true">
+          Please give category name
+      </v-alert> -->
+      <v-form @submit.prevent="submit">
+          <v-text-field
+            label="Category Name"
+            v-model="form.name"
+            autocomplete="off"
+            required
+            ></v-text-field>
+
+            <v-btn type="submit" color="pink" v-if="editSlug" :disabled="disabled">Update</v-btn>
+            <v-btn type="submit" color="teal" v-else :disabled="disabled">Create</v-btn>
+      </v-form>
+
+      <v-card class="mt-3">
+          <v-toolbar color="indigo" dark dense>
+          <v-toolbar-title>Categories</v-toolbar-title>
+        </v-toolbar>
+
+        <v-list>
+            <div v-for="(category,index) in categories" :key="category.id">
+                <v-list-item>
+
+                <v-list-item-icon>
+                    <v-btn icon small @click="edit(index)">
+                        <v-icon color="orange">mdi-circle-edit-outline</v-icon>
+                    </v-btn>
+                </v-list-item-icon>
+
+                <v-list-item-content>
+                    <v-list-item-title>
+                        {{category.name}}
+                    </v-list-item-title>
+                </v-list-item-content>
+
+                <v-list-item-icon>
+                    <v-btn icon small @click="destroy(category.slug,index)">
+                        <v-icon color="red">mdi-delete</v-icon>
+                    </v-btn>
+                </v-list-item-icon>
+            </v-list-item>
+            <v-divider></v-divider>
+            </div>
+        </v-list>
+      </v-card>
+  </v-container>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      form: {
+        name: null
+      },
+      categories: [],
+      editSlug: null,
+      errors: null
+    };
+  },
+  created() {
+    this.$axios.get("/categories").then(res => (this.categories = res.data.data));
+  },
+  methods: {
+    submit() {
+      this.editSlug ? this.update() : this.create();
+    },
+    update() {
+      this.$axios.put(`/categories/${this.editSlug}`, this.form)
+        .then(res => {
+            this.categories.unshift(res.data.data);
+            this.form.name = null;
+        });
+    },
+    create() {
+      this.$axios
+        .post("/categories", this.form)
+        .then(res => {
+          this.categories.unshift(res.data.data);
+          this.form.name = null;
+        })
+        .catch(error => (this.errors = error.response.data.errors));
+    },
+    destroy(slug, index) {
+      this.$axios
+        .delete(`/categories/${slug}`)
+        .then(res => this.categories.splice(index, 1));
+    },
+    edit(index) {
+      this.form.name = this.categories[index].name;
+      this.editSlug = this.categories[index].slug;
+      this.categories.splice(index, 1);
+    }
+  },
+  computed: {
+    disabled() {
+      return !this.form.name;
+    }
+  }
+};
+</script>
+
+<style>
+</style>
