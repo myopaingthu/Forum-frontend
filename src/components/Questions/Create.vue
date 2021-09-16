@@ -53,7 +53,7 @@ export default {
         create() {
         this.$axios
             .post("/questions", this.form)
-            .then(res => this.$router.push('/questions'))
+            .then(res => this.$router.push(res.data.data.path))
             .catch(error => (this.errors = error.response.data.errors));
         }
     },

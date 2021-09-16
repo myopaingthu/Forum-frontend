@@ -17,10 +17,9 @@
         </v-card-text>
       </v-card>
 </template>
-
 <script>
 export default {
-    props:['data']
+    props:['data'],
 }
 </script>
 

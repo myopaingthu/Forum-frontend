@@ -4,17 +4,47 @@
       <router-link class="white--text" style="text-decoration: none; color: white;" to="/">Ask For Ans</router-link>
     </v-toolbar-title>
     <v-spacer></v-spacer>
-    <!-- <app-notification v-if="loggedIn"></app-notification> -->
+    <app-notification v-if="isLoggedIn"></app-notification>
     <div class="hidden-sm-and-down">
       <router-link 
-        v-for="item in items"
-        :key="item.title"
-        :to="item.to"
-        v-if="item.show"
+        :to="'/questions'"
+        v-if="isLoggedIn"
         class="mr-3"
         style="text-decoration: none;
         color: white;">
-        {{item.title}}
+        Forum
+      </router-link>
+      <router-link 
+        :to="'/ask'"
+        v-if="isLoggedIn"
+        class="mr-3"
+        style="text-decoration: none;
+        color: white;">
+        Ask Question
+      </router-link>
+      <router-link 
+        :to="'/categories'"
+        v-if="isLoggedIn"
+        class="mr-3"
+        style="text-decoration: none;
+        color: white;">
+        Category
+      </router-link>
+      <router-link 
+        :to="'/login'"
+        v-if="!isLoggedIn"
+        class="mr-3"
+        style="text-decoration: none;
+        color: white;">
+        Log In
+      </router-link>
+      <router-link 
+        :to="'/register'"
+        v-if="!isLoggedIn"
+        class="mr-3"
+        style="text-decoration: none;
+        color: white;">
+        Register
       </router-link>
 
       <v-menu v-if="isLoggedIn" offset-y>
@@ -44,43 +74,36 @@
 </template>
 
 <script>
-import store from "../store";
-// import AppNotification from "./AppNotification";
+// import store from "../store";
+import AppNotification from "./AppNotification";
+import { mapGetters } from "vuex";
 export default {
     name: 'Toolbar',
-//   components: { AppNotification },
+  components: { AppNotification },
   data() {
     return {
-      isLoggedIn: "",
-      items: [
-        { title: "Forum", to: "/questions", show: true },
-        { title: "Ask Question", to: "/ask", show: store.getters.isLoggedIn },
-        { title: "Category", to: "/categories", show: store.getters.isLoggedIn },
-        { title: "Login", to: "/login", show: !store.getters.isLoggedIn },
-        { title: "Register", to: "/register", show: !store.getters.isLoggedIn }
-      ],
+      // isLoggedIn: "",
+     
       userName: "",
     };
   },
-  created() {
-    this.isLoggedIn = store.getters.isLoggedIn;
+  // created() {
+  //   this.isLoggedIn = store.getters.isLoggedIn;
+  // },
+  computed: {
+        ...mapGetters(["userId", "token", "isLoggedIn"]),
   },
   methods: {
     logOut() {
-      console.log("log out");
       this.$axios.post('/logout')
         .then(() => {
-            this.$store
-                .dispatch("destroyToken")
-                .then(() => {
+          this.$store
+            .dispatch("destroyToken")
+        })
+        .then(() => {
                 this.$router.push({ name: "Welcome" });
-                })
-                  .catch(err => {
-                console.log(err);
-                });
         })
         .catch((error) => {
-            // this.errors = error.response.data.errors;
             console.log(error);
         });
     },
