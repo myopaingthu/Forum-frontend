@@ -57,27 +57,30 @@ export default {
     //  computed: {
     //     ...mapGetters(["token"]),
     // },
-    created() {
-        // if(User.loggedIn()){
-        //     this.$router.push({name:'forum'})
-        // }
-    },
       methods:{
         login(){
-            this.$axios.post('/login',this.form)
-            .then(res => {
-                this.data = res.data.data;
-                this.$store
-                    .dispatch("setToken", this.data)
-                    .then(() => {
+            // this.$axios.post('/login',this.form)
+            //     .then(res => {
+            //         this.data = res.data.data;
+            //         return this.$store
+            //             .dispatch("setToken", this.data);
+            //     })
+            //     .then(() => {
+            //         this.$router.push({ name: "QuestionIndex" });
+            //     })
+            //     .catch((error) => {
+            //         console.log(error);
+            //         this.errors = error.response.data.errors;
+            //     });
+            this.$store
+                .dispatch("login", this.form)
+                .then(() => {
+                    this.error = "";
                     this.$router.push({ name: "QuestionIndex" });
-                    })
-                     .catch(err => {
-                    this.errors = err.response.data.errors;
-                    });
                 })
-            .catch((error) => {
-                this.errors = error.response.data.errors;
+                .catch(err => {
+                    
+                    console.log(err);
                 });
         }
     } 

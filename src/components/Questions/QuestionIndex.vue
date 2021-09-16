@@ -18,7 +18,6 @@
         </v-flex>
         
         <v-flex xs4>
-            <!-- <category-index></category-index> -->
             <v-card>
                 <v-toolbar color="indigo" dark dense class="mt-2">
                     <v-toolbar-title>Categories</v-toolbar-title>
@@ -44,6 +43,7 @@
     </v-container>
 </template>
 <script>
+import { mapGetters } from "vuex";
 import Question from "./Question";
 export default {
 
@@ -60,7 +60,7 @@ export default {
         Question
     },
     computed: {
-        
+        ...mapGetters(["userId", "token"]),
     },
     created() {
         this.fetchQuestions();
@@ -68,8 +68,9 @@ export default {
         .then(res => this.categories = res.data.data)
         .catch(error => console.log(error));
     },
-    methods:{
+    methods: {
         fetchQuestions(page){
+            this.$axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.token;
             let url = page ? `/questions?page=${page}`: '/questions';
             this.$axios.get(url)
                 .then(res => {

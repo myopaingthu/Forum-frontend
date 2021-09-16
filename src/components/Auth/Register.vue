@@ -70,7 +70,7 @@ export default {
                 password_confirmation:null
             },
             errors:{},
-            token:" ",
+            data:" ",
         }
     },
     created(){
@@ -81,18 +81,15 @@ export default {
     methods:{
         signup(){
             this.$axios.post('/register',this.form)
-            .then(res => {
-                this.token = res.data.data.token;
-                this.$store
-                    .dispatch("setToken", this.token)
-                    .then(() => {
-                    this.$router.push({ name: "Login" });
-                    })
-                     .catch(err => {
-                    console.log(err);
-                    });
+                .then(res => {
+                    this.data = res.data.data;
+                    this.$store
+                        .dispatch("setToken", this.data)
                 })
-            .catch(error => this.errors = error.response.data.errors )
+                .then(() => {
+                    this.$router.push({ name: "QuestionIndex" });
+                })
+                .catch(error => this.errors = error.response.data.errors )
         }
     } 
 }

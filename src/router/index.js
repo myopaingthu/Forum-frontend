@@ -10,6 +10,7 @@ import QuestionIndex from "../components/Questions/QuestionIndex";
 import Welcome from "../components/Welcome";
 import CreateCategory from "../components/Categories/Create";
 import CreateQuestion from "../components/Questions/Create";
+import ReadQuestion from "../components/Questions/ReadQuestion";
 
 const routes = [
     {
@@ -41,6 +42,11 @@ const routes = [
         path: '/ask',
         name: "CreateQuestion",
         component: CreateQuestion
+    },
+    {
+        path: '/question/:slug',
+        component: ReadQuestion,
+        name: 'ReadQuestion'
     },
 ];
 
