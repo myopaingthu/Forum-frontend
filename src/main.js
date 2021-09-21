@@ -14,12 +14,15 @@ window.Pusher = require('pusher-js');
 Vue.config.productionTip = false
 
 Vue.prototype.$axios = axios;
+axios.interceptors.request.use((config) => {
+  const token = localStorage.getItem('access_token');
+  config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
 axios.defaults.baseURL = process.env.VUE_APP_SERVER;
 const token = localStorage.getItem('access_token');
 const Token ='Bearer ' + token;
-if (token) {
-  axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
-}
+
 Vue.component('vue-simplemde', VueSimplemde);
 
 window.md = md;

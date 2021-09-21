@@ -75,7 +75,6 @@ export default {
             this.$store
                 .dispatch("login", this.form)
                 .then(() => {
-                    this.error = "";
                     this.$router.push({ name: "QuestionIndex" });
                 })
                 .catch(err => {
