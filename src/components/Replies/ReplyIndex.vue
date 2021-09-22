@@ -28,22 +28,26 @@ export default {
         listen(){
             EventBus.$on('newReply',(reply) => {
                 this.content.unshift(reply);
+                this.question.reply_count++;
             });
             EventBus.$on('deleteReply',(index) => {
                 this.$axios.delete(`/replies/${this.content[index].id}`)
                 .then(res => {
                     this.content.splice(index,1);
+                    this.question.reply_count--;
                 });
             });
             Echo.private('App.Models.User.' + this.userId)
                 .notification((notification) => {
                     this.content.unshift(notification.reply);
+                    this.question.reply_count++;
             });
             Echo.channel('deleteReplyChannel')
             .listen('DeleteReplyEvent',(e) => {
                 for(let index = 0; index < this.content.length; index++){
                     if(this.content[index].id == e.id){
-                        this.content.splice(index,1)
+                        this.content.splice(index,1);
+                        this.question.reply_count--;
                     }
                 }
             });

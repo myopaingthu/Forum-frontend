@@ -27,11 +27,7 @@ export default {
   },
 
   created() {
-    // this.$axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.token;
-      // window.Echo.channel('channel')
-      //       .listen('Hello',(e) => {
-      //           console.log(e);
-      //       });
+   
   },
 };
 </script>

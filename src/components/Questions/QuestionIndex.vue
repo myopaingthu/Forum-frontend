@@ -70,7 +70,6 @@ export default {
     },
     methods: {
         fetchQuestions(page){
-            this.$axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.token;
             let url = page ? `/questions?page=${page}`: '/questions';
             this.$axios.get(url)
                 .then(res => {

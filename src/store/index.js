@@ -1,7 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import createPersistedState from "vuex-persistedstate";
-import axios from "axios";
 
 Vue.use(Vuex);
 
@@ -30,7 +29,7 @@ export default new Vuex.Store({
             commit('destroyToken');
         },
         login({ commit }, credentials) {
-            return axios.post("http://127.0.0.1:8000/api/login", credentials).then(( res ) => {
+            return this._vm.$axios.post("/login", credentials).then(( res ) => {
                 localStorage.setItem('access_token', res.data.data.token);
                 commit("setToken", res.data.data);
             });

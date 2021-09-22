@@ -52,7 +52,6 @@ export default {
         alert.play();
         },
         getNotifications() {
-        this.$axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.token;
         this.$axios
             .post("/notifications")
             .then(res => {
